@@ -56,7 +56,7 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
             string number_string = encoded_value.substr(i, colon_index);
             int64_t number = atoll(number_string.c_str());
             string str = encoded_value.substr(colon_index + 1, number);
-            return {"\""+str+"\"", colon_index - init + 1 + number};
+            return {json(str), colon_index - init + 1 + number};
         } else {
             throw runtime_error("Invalid encoded value: " + encoded_value);
         }
