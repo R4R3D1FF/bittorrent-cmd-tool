@@ -93,7 +93,7 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
     }
 
     else if (encoded_value[i] == 'd'){
-        map<string, string> ret;
+        map<json, json> ret;
         i++;
         while (encoded_value[i] != 'e'){
             pair<json, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
