@@ -29,7 +29,7 @@ json decode_bencoded_value(const std::string& encoded_value) {
         }
     } 
     else if (encoded_value[0] == 'i'){
-        int total = 0;
+        long long total = 0;
         int i = 1;
         while (encoded_value[i] != 'e'){
             total *= 10;
@@ -38,7 +38,7 @@ json decode_bencoded_value(const std::string& encoded_value) {
         }
         if (i == encoded_value.length()-1)
             return json(total);
-        else throw std::runtime_error("Unhandled encoded value: " + encoded_value);
+        else throw std::runtime_error("Invalid encoded value: " + encoded_value);
     }
     else {
         throw std::runtime_error("Unhandled encoded value: " + encoded_value);
