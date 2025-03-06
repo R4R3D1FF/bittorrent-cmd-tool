@@ -99,10 +99,6 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
             pair<json, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
             cerr << listItem1.first << endl;
             i += listItem1.second;
-            if (encoded_value[i] == ':')
-                i++;
-            else
-                throw runtime_error("Invalid encoded value: " + encoded_value);
             pair<json, int> listItem2 = decode_bencoded_value_pair(encoded_value, i);
             i += listItem2.second;
             ret[listItem1.first] = listItem2.first;
