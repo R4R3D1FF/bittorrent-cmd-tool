@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 
         // Uncomment this block to pass the first stage
         string encoded_value = argv[2];
-        json decoded_value = decode_bencoded_value(encoded_value);
+        string decoded_value = decode_bencoded_value(encoded_value).first;
         cout << decoded_value << endl;
         // cout << decoded_value.dump() << endl;
     } else {
