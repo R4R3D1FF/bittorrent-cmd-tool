@@ -31,13 +31,19 @@ json decode_bencoded_value(const std::string& encoded_value) {
     else if (encoded_value[0] == 'i'){
         long long total = 0;
         int i = 1;
+        if (encoded_value[i] == '-')
+            i++;
         while (encoded_value[i] != 'e'){
             total *= 10;
             total += encoded_value[i]-'0';
             i++;
         }
-        if (i == encoded_value.length()-1)
-            return json(total);
+        if (i == encoded_value.length()-1){
+            if (encoded_value[1] == '-')
+                return json(-total);
+            else
+                return json(total);
+        }
         else throw std::runtime_error("Invalid encoded value: " + encoded_value);
     }
     else {
