@@ -23,6 +23,22 @@ string printVector(vector<string> v){
     return ret;
 }
 
+string printVector(vector<pair<string, string>> v){
+    if (v.size() == 0)
+        return "{}";
+    string ret = "{";
+    for (int i = 0; i < v.size(); i++){
+        ret += v[i].first;
+        ret += ':';
+        ret += v[i].second;
+        if (i != v.size()-1)
+            ret += ',';
+        else
+            ret += '}';
+    }
+    return ret;
+}
+
 
 pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int init = 0) {
     int i = init;
@@ -62,6 +78,7 @@ pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int in
         else
             return {to_string(total), i - init + 1};
     }
+
     else if (encoded_value[i] == 'l'){
         vector<string> ret;
         i++;
@@ -74,6 +91,22 @@ pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int in
         }
         return {printVector(ret), i - init + 1};
     }
+
+    else if (encoded_value[i] == 'd'){
+        vector<pair<string, string>> ret;
+        i++;
+        while (encoded_value[i] != 'e'){
+            pair<string, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
+            i += listItem1.second;
+            pair<string, int> listItem2 = decode_bencoded_value_pair(encoded_value, i);
+            i += listItem2.second;
+            ret.push_back({listItem1.first, listItem2.first});
+            if (i >= encoded_value.length())
+                throw runtime_error("Unhandled encoded value: " + encoded_value);
+        }
+        return {printVector(ret), i - init + 1};
+    }
+
     else {
         throw runtime_error("Unhandled encoded value: " + encoded_value);
     }
