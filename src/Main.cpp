@@ -40,7 +40,7 @@ pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 
             string number_string = encoded_value.substr(i, colon_index);
             int64_t number = atoll(number_string.c_str());
             string str = encoded_value.substr(colon_index + 1, number);
-            return {str, colon_index - init + 1 + number};
+            return {"\""+str+"\"", colon_index - init + 1 + number};
         } else {
             throw runtime_error("Invalid encoded value: " + encoded_value);
         }
@@ -67,11 +67,7 @@ pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 
         i++;
         while (encoded_value[i] != 'e'){
             pair<string, int> listItem = decode_bencoded_value(encoded_value, i);
-            if (encoded_value[i] >= '0' && encoded_value[i] <= '9'){
-                ret.push_back("\"" + listItem.first + "\"");
-            }
-            else
-                ret.push_back(listItem.first);
+            ret.push_back(listItem.first);
             i += listItem.second;
             if (i >= encoded_value.length())
                 throw runtime_error("Unhandled encoded value: " + encoded_value);
