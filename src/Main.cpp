@@ -40,7 +40,7 @@ string printVector(vector<pair<string, string>> v){
 }
 
 
-pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int init = 0) {
+pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init = 0) {
     int i = init;
 
     if (isdigit(encoded_value[i])) {
@@ -74,41 +74,41 @@ pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int in
         if (i >= encoded_value.length())
             throw runtime_error("Invalid encoded value: " + encoded_value);
         if (encoded_value[1] == '-')
-            return {to_string(-total), i - init + 1};
+            return {json(-total), i - init + 1};
         else
-            return {to_string(total), i - init + 1};
+            return {json(total), i - init + 1};
     }
 
     else if (encoded_value[i] == 'l'){
-        vector<string> ret;
+        vector<json> ret;
         i++;
         while (encoded_value[i] != 'e'){
-            pair<string, int> listItem = decode_bencoded_value_pair(encoded_value, i);
+            pair<json, int> listItem = decode_bencoded_value_pair(encoded_value, i);
             ret.push_back(listItem.first);
             i += listItem.second;
             if (i >= encoded_value.length())
                 throw runtime_error("Unhandled encoded value: " + encoded_value);
         }
-        return {printVector(ret), i - init + 1};
+        return {json(ret), i - init + 1};
     }
 
     else if (encoded_value[i] == 'd'){
-        vector<pair<string, string>> ret;
+        map<string, string> ret;
         i++;
         while (encoded_value[i] != 'e'){
-            pair<string, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
+            pair<json, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
             i += listItem1.second;
             if (encoded_value[i] == ':')
                 i++;
             else
                 throw runtime_error("Invalid encoded value: " + encoded_value);
-            pair<string, int> listItem2 = decode_bencoded_value_pair(encoded_value, i);
+            pair<json, int> listItem2 = decode_bencoded_value_pair(encoded_value, i);
             i += listItem2.second;
-            ret.push_back({listItem1.first, listItem2.first});
+            ret[listItem1.first] = listItem2.first;
             if (i >= encoded_value.length())
                 throw runtime_error("Unhandled encoded value: " + encoded_value);
         }
-        return {printVector(ret), i - init + 1};
+        return {json(ret), i - init + 1};
     }
 
     else {
@@ -117,7 +117,7 @@ pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int in
 }
 
 json decode_bencoded_value(const string& encoded_value){
-    return json(decode_bencoded_value_pair(encoded_value).first);
+    return decode_bencoded_value_pair(encoded_value).first;
 }
 
 
