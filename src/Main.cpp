@@ -159,6 +159,7 @@ int main(int argc, char* argv[]) {
         string fileContents;
         getline(torrentFile, fileContents);
         json decoded_value = decode_bencoded_value(fileContents);
+        cerr << "REACHED\n";
         cout << "Tracker URL: " << to_string(decoded_value["announce"]) << endl;
         cout << "Length: " << decoded_value["info"]["length"] << endl;
     }
