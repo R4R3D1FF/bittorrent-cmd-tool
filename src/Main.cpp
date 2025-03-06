@@ -23,6 +23,7 @@ string printVector(vector<string> v){
     return ret;
 }
 
+
 pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 0) {
     int i = init;
 
@@ -66,7 +67,11 @@ pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 
         i++;
         while (encoded_value[i] != 'e'){
             pair<string, int> listItem = decode_bencoded_value(encoded_value, i);
-            ret.push_back(listItem.first);
+            if (encoded_value[i] >= '0' && encoded_value[i] <= '9'){
+                ret.push_back("\"" + listItem.first + "\"");
+            }
+            else
+                ret.push_back(listItem.first);
             i += listItem.second;
             if (i >= encoded_value.length())
                 throw runtime_error("Unhandled encoded value: " + encoded_value);
