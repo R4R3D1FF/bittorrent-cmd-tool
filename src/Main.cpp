@@ -7,79 +7,104 @@
 #include "lib/nlohmann/json.hpp"
 
 using json = nlohmann::json;
+using namespace std;
 
-string decode_bencoded_value(const std::string& encoded_value) {
+string printVector(vector<string> v){
+    string ret = "[";
+    for (int i = 0; i < v.size(); i++){
+        ret += v[i];
+        if (i != v.size()-1)
+            ret += ',';
+        else
+            ret += ']';
+    }
+    return ret;
+}
 
-    if (std::isdigit(encoded_value[0])) {
-        // std::string ret = "";
+pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 0) {
+    int i = init;
+
+    if (isdigit(encoded_value[i])) {
+        // string ret = "";
         // int i = 0;
         // while (encoded_value[i] != ':')
         //     i++;
         // return json(encoded_value.substr(i+1, encoded_value.length()-i+1));
         
         // Example: "5:hello" -> "hello"
-        size_t colon_index = encoded_value.find(':');
-        if (colon_index != std::string::npos) {
-            std::string number_string = encoded_value.substr(0, colon_index);
-            int64_t number = std::atoll(number_string.c_str());
-            std::string str = encoded_value.substr(colon_index + 1, number);
-            return json(str);
+        size_t colon_index = encoded_value.find(':', i);
+        if (colon_index != string::npos) {
+            string number_string = encoded_value.substr(i, colon_index);
+            int64_t number = atoll(number_string.c_str());
+            string str = encoded_value.substr(colon_index + 1, number);
+            return {str, colon_index - init + 1 + number};
         } else {
-            throw std::runtime_error("Invalid encoded value: " + encoded_value);
+            throw runtime_error("Invalid encoded value: " + encoded_value);
         }
     } 
-    else if (encoded_value[0] == 'i'){
+    else if (encoded_value[i] == 'i'){
         long long total = 0;
-        int i = 1;
+        i++;
         if (encoded_value[i] == '-')
             i++;
-        while (encoded_value[i] != 'e'){
+        while (encoded_value[i] != 'e' && i < encoded_value.length()){
             total *= 10;
             total += encoded_value[i]-'0';
             i++;
         }
-        if (i == encoded_value.length()-1){
-            if (encoded_value[1] == '-')
-                return json(-total);
-            else
-                return json(total);
+        if (i >= encoded_value.length())
+            throw runtime_error("Invalid encoded value: " + encoded_value);
+        if (encoded_value[1] == '-')
+            return {to_string(-total), i - init + 1};
+        else
+            return {to_string(total), i - init + 1};
+    }
+    else if (encoded_value[i] == 'l'){
+        vector<string> ret;
+        i++;
+        while (encoded_value[i] != 'e'){
+            pair<string, int> listItem = decode_bencoded_value(encoded_value, i);
+            ret.push_back(listItem.first);
+            i += listItem.second;
+            if (i >= encoded_value.length())
+                throw runtime_error("Unhandled encoded value: " + encoded_value);
         }
-        else throw std::runtime_error("Invalid encoded value: " + encoded_value);
+        return {printVector(ret), i - init + 1};
     }
     else {
-        throw std::runtime_error("Unhandled encoded value: " + encoded_value);
+        throw runtime_error("Unhandled encoded value: " + encoded_value);
     }
 }
 
 
 
 int main(int argc, char* argv[]) {
-    // Flush after every std::cout / std::cerr
-    std::cout << std::unitbuf;
-    std::cerr << std::unitbuf;
+    // Flush after every cout / cerr
+    cout << unitbuf;
+    cerr << unitbuf;
 
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " decode <encoded_value>" << std::endl;
+        cerr << "Usage: " << argv[0] << " decode <encoded_value>" << endl;
         return 1;
     }
 
-    std::string command = argv[1];
+    string command = argv[1];
 
     if (command == "decode") {
         if (argc < 3) {
-            std::cerr << "Usage: " << argv[0] << " decode <encoded_value>" << std::endl;
+            cerr << "Usage: " << argv[0] << " decode <encoded_value>" << endl;
             return 1;
         }
         // You can use print statements as follows for debugging, they'll be visible when running tests.
-        std::cerr << "Logs from your program will appear here!" << std::endl;
+        cerr << "Logs from your program will appear here!" << endl;
 
         // Uncomment this block to pass the first stage
-        std::string encoded_value = argv[2];
+        string encoded_value = argv[2];
         json decoded_value = decode_bencoded_value(encoded_value);
-        std::cout << decoded_value << std::endl;
-        // std::cout << decoded_value.dump() << std::endl;
+        cout << decoded_value << endl;
+        // cout << decoded_value.dump() << endl;
     } else {
-        std::cerr << "unknown command: " << command << std::endl;
+        cerr << "unknown command: " << command << endl;
         return 1;
     }
 
