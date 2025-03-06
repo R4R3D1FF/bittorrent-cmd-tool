@@ -66,7 +66,7 @@ pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int in
         vector<string> ret;
         i++;
         while (encoded_value[i] != 'e'){
-            pair<string, int> listItem = decode_bencoded_value(encoded_value, i);
+            pair<string, int> listItem = decode_bencoded_value_pair(encoded_value, i);
             ret.push_back(listItem.first);
             i += listItem.second;
             if (i >= encoded_value.length())
