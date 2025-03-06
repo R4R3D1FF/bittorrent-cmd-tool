@@ -97,6 +97,7 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
         i++;
         while (encoded_value[i] != 'e'){
             pair<json, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
+            cerr << listItem1.first << endl;
             i += listItem1.second;
             if (encoded_value[i] == ':')
                 i++;
