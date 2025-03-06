@@ -24,7 +24,7 @@ string printVector(vector<string> v){
 }
 
 
-pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 0) {
+pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int init = 0) {
     int i = init;
 
     if (isdigit(encoded_value[i])) {
@@ -79,6 +79,10 @@ pair<string, int> decode_bencoded_value(const string& encoded_value, int init = 
     }
 }
 
+json decode_bencoded_value(const string& encoded_value){
+    return json(decode_bencoded_value_pair(encoded_value).first);
+}
+
 
 
 int main(int argc, char* argv[]) {
@@ -103,8 +107,7 @@ int main(int argc, char* argv[]) {
 
         // Uncomment this block to pass the first stage
         string encoded_value = argv[2];
-        string decoded_value = decode_bencoded_value(encoded_value).first;
-        cout << decoded_value << endl;
+        json decoded_value = decode_bencoded_value(encoded_value);
         // cout << decoded_value.dump() << endl;
     } else {
         cerr << "unknown command: " << command << endl;
