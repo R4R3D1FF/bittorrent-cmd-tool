@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <cctype>
@@ -143,7 +144,26 @@ int main(int argc, char* argv[]) {
         string encoded_value = argv[2];
         json decoded_value = decode_bencoded_value(encoded_value);
         cout << decoded_value.dump() << endl;
-    } else {
+    } 
+
+    else if (command == "info"){
+        if (argc < 3) {
+            cerr << "Usage: " << argv[0] << " info <torrent_file>" << endl;
+            return 1;
+        }
+        // You can use print statements as follows for debugging, they'll be visible when running tests.
+        cerr << "Logs from your program will appear here!" << endl;
+
+        // Uncomment this block to pass the first stage
+        ifstream torrentFile(argv[2]);
+        string fileContents;
+        getline(torrentFile, fileContents);
+        json decoded_value = decode_bencoded_value(fileContents);
+        cout << "Tracker URL: " << decoded_value["announce"] << endl;
+        cout << "Length: " << decoded_value["info"]["length"] << endl;
+    }
+
+    else {
         cerr << "unknown command: " << command << endl;
         return 1;
     }
