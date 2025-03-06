@@ -98,6 +98,10 @@ pair<string, int> decode_bencoded_value_pair(const string& encoded_value, int in
         while (encoded_value[i] != 'e'){
             pair<string, int> listItem1 = decode_bencoded_value_pair(encoded_value, i);
             i += listItem1.second;
+            if (encoded_value[i] == ':')
+                i++;
+            else
+                throw runtime_error("Invalid encoded value: " + encoded_value);
             pair<string, int> listItem2 = decode_bencoded_value_pair(encoded_value, i);
             i += listItem2.second;
             ret.push_back({listItem1.first, listItem2.first});
