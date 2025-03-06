@@ -9,7 +9,14 @@
 using json = nlohmann::json;
 
 json decode_bencoded_value(const std::string& encoded_value) {
+
     if (std::isdigit(encoded_value[0])) {
+        // std::string ret = "";
+        // int i = 0;
+        // while (encoded_value[i] != ':')
+        //     i++;
+        // return json(encoded_value.substr(i+1, encoded_value.length()-i+1));
+        
         // Example: "5:hello" -> "hello"
         size_t colon_index = encoded_value.find(':');
         if (colon_index != std::string::npos) {
@@ -20,10 +27,25 @@ json decode_bencoded_value(const std::string& encoded_value) {
         } else {
             throw std::runtime_error("Invalid encoded value: " + encoded_value);
         }
-    } else {
+    } 
+    else if (encoded_value[0] == 'i'){
+        int total = 0;
+        int i = 1;
+        while (encoded_value[i] != 'e'){
+            total *= 10;
+            total += encoded_value[i]-'0';
+            i++;
+        }
+        if (i == encoded_value.length()-1)
+            return json(total);
+        else throw std::runtime_error("Unhandled encoded value: " + encoded_value);
+    }
+    else {
         throw std::runtime_error("Unhandled encoded value: " + encoded_value);
     }
 }
+
+
 
 int main(int argc, char* argv[]) {
     // Flush after every std::cout / std::cerr
