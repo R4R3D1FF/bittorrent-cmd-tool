@@ -10,6 +10,8 @@ using json = nlohmann::json;
 using namespace std;
 
 string printVector(vector<string> v){
+    if (v.size() == 0)
+        return "[]";
     string ret = "[";
     for (int i = 0; i < v.size(); i++){
         ret += v[i];
