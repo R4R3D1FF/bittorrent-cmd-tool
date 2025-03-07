@@ -10,6 +10,23 @@
 using json = nlohmann::json;
 using namespace std;
 
+std::string readFile(const std::string& filename) {
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    if (!file) {
+        throw std::runtime_error("Could not open file: " + filename);
+    }
+
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    std::vector<char> buffer(size);
+    if (!file.read(buffer.data(), size)) {
+        throw std::runtime_error("Error reading file: " + filename);
+    }
+
+    return std::string(buffer.begin(), buffer.end());
+}
+
 string printVector(vector<string> v){
     if (v.size() == 0)
         return "[]";
@@ -187,9 +204,8 @@ int main(int argc, char* argv[]) {
         cerr << "Logs from your program will appear here!" << endl;
 
         // Uncomment this block to pass the first stage
-        ifstream torrentFile(argv[2]);
         string fileContents;
-        getline(torrentFile, fileContents);
+        fileContents = readFile(argv[2]);
         json decoded_value = decode_bencoded_value(fileContents);
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
