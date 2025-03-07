@@ -207,6 +207,7 @@ int main(int argc, char* argv[]) {
         // Uncomment this block to pass the first stage
         string fileContents;
         fileContents = readFile(argv[2]);
+        cerr << fileContents<< endl;
         json decoded_value = decode_bencoded_value(fileContents);
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
