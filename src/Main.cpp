@@ -4,8 +4,9 @@
 #include <vector>
 #include <cctype>
 #include <cstdlib>
-#include "lib/sha/sha1.hpp"
 #include "lib/nlohmann/json.hpp"
+#include "lib/sha/sha1.cpp"
+#
 
 using json = nlohmann::json;
 using namespace std;
@@ -214,10 +215,10 @@ int main(int argc, char* argv[]) {
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
         cout << "Length: " << decoded_value["info"]["length"] << endl;
-        SHA1 sha1;
         cerr << "Bencoded json: " << bencode_json(decoded_value["info"]) << endl;
-        sha1.update(bencode_json(decoded_value["info"]));
-        cout << "Info: " << sha1.final() << endl;
+        
+        SHA1 sha1(bencode_json(decoded_value["info"]));
+        cout << "Info: " << sha1.getHash() << endl;
     }
 
     else {
