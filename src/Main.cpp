@@ -210,9 +210,9 @@ int main(int argc, char* argv[]) {
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
         cout << "Length: " << decoded_value["info"]["length"] << endl;
-        // SHA1 sha1;
-        // sha1.update(bencode_json(decoded_value["info"]));
-        // cout << "Info: " << sha1.final() << endl;
+        SHA1 sha1;
+        sha1.update(bencode_json(decoded_value["info"]));
+        cout << "Info: " << sha1.final() << endl;
     }
 
     else {
