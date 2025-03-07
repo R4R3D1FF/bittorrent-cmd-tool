@@ -155,13 +155,14 @@ string bencode_json(json info){
     }
     else if (info.is_number()){
         ret += 'i';
-        ret += info.dump();
+        ret += info.dump(-1, ' ' , false, json::error_handler_t::ignore);
         ret += 'e';
     }
     else if (info.is_string()){
         ret += to_string(info.dump().length()-2);
         ret += ':';
-        ret += info.dump().substr(1, info.dump().length()-2);
+        string unstripped = info.dump(-1, ' ' , false, json::error_handler_t::ignore);
+        ret += unstripped.substr(1, unstripped.length()-2);
 
     }
     return ret;
