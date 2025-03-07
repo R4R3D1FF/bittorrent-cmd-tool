@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 #include <sstream>
+#include <cstdint>
 #include "sha1.h"
 
 SHA1::SHA1(std::string input) {
