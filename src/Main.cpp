@@ -88,7 +88,7 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
             ret.push_back(listItem.first);
             i += listItem.second;
             if (i >= encoded_value.length())
-                throw runtime_error("Unhandled encoded value: " + encoded_value);
+                throw runtime_error("Invalid encoded value: " + encoded_value);
         }
         return {json(ret), i - init + 1};
     }
@@ -104,7 +104,7 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
             i += listItem2.second;
             ret[listItem1.first] = listItem2.first;
             if (i >= encoded_value.length())
-                throw runtime_error("Unhandled encoded value: " + encoded_value);
+                throw runtime_error("Invalid encoded value: " + encoded_value);
         }
         return {json(ret), i - init + 1};
     }
@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
         cerr << "Logs from your program will appear here!" << endl;
 
         // Uncomment this block to pass the first stage
-        ifstream torrentFile(argv[2]);
+        ifstream torrentFile(argv[2], ios::binary);
         string fileContents;
         getline(torrentFile, fileContents);
         json decoded_value = decode_bencoded_value(fileContents);
