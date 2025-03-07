@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
         cerr << "Logs from your program will appear here!" << endl;
 
         // Uncomment this block to pass the first stage
-        ifstream torrentFile(argv[2], ios::binary);
+        ifstream torrentFile(argv[2]);
         string fileContents;
         getline(torrentFile, fileContents);
         json decoded_value = decode_bencoded_value(fileContents);
