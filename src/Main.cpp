@@ -4,7 +4,7 @@
 #include <vector>
 #include <cctype>
 #include <cstdlib>
-
+#include "lib/sha/sha1.hpp"
 #include "lib/nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -118,6 +118,38 @@ json decode_bencoded_value(const string& encoded_value){
     return decode_bencoded_value_pair(encoded_value).first;
 }
 
+string bencode_json(json info){
+    string ret = "";
+    if (info.is_array()){
+        ret += "l";
+        for (int i = 0; i < info.size(); i++){
+            ret += bencode_json(info[i]);
+        }
+        ret += "e";
+    }
+    else if (info.is_object()){
+        ret += "d";
+        for (auto item: info.items()){
+            ret += bencode_json(item.key());
+            ret += bencode_json(item.value());
+        }
+        ret += "e";
+    }
+    else if (info.is_number()){
+        ret += 'i';
+        ret += info.dump();
+        ret += 'e';
+    }
+    else if (info.is_string()){
+        ret += to_string(info.dump().length()-2);
+        ret += ':';
+        ret += info.dump().substr(1, info.dump().length()-2);
+
+    }
+    return ret;
+
+}
+
 
 
 int main(int argc, char* argv[]) {
@@ -162,6 +194,9 @@ int main(int argc, char* argv[]) {
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
         cout << "Length: " << decoded_value["info"]["length"] << endl;
+        SHA1 sha1;
+        sha1.update(bencode_json(decoded_value["info"]));
+        cout << "Info: " << sha1.final() << endl;
     }
 
     else {
