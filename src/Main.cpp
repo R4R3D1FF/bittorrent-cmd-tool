@@ -217,8 +217,7 @@ int main(int argc, char* argv[]) {
         cout << "Length: " << decoded_value["info"]["length"] << endl;
         cerr << "Bencoded json: " << bencode_json(decoded_value["info"]) << endl;
         
-        SHA1 sha1(bencode_json(decoded_value["info"]));
-        cout << "Info: " << sha1.getHash() << endl;
+        cout << "Info: " << sha1(bencode_json(decoded_value["info"])) << endl;
     }
 
     else {
