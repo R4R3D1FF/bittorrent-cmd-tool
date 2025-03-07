@@ -136,7 +136,7 @@ json decode_bencoded_value(const string& encoded_value){
 }
 
 string bencode_json(json info){
-    cerr << "bencoding json";
+    cerr<<"Bencoding\n" << info.dump() << endl;
     string ret = "";
     if (info.is_array()){
         ret += "l";
