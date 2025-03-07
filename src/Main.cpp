@@ -215,6 +215,7 @@ int main(int argc, char* argv[]) {
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
         cout << "Length: " << decoded_value["info"]["length"] << endl;
         SHA1 sha1;
+        cerr << bencode_json(decoded_value["info"]) << endl;
         sha1.update(bencode_json(decoded_value["info"]));
         cout << "Info: " << sha1.final() << endl;
     }
