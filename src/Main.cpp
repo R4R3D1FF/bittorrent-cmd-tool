@@ -159,9 +159,10 @@ string bencode_json(json info){
         ret += 'e';
     }
     else if (info.is_string()){
-        ret += to_string(info.dump().length()-2);
-        ret += ':';
         string unstripped = info.dump(-1, ' ' , false, json::error_handler_t::ignore);
+        ret += to_string(unstripped.length()-2);
+        ret += ':';
+        
         ret += unstripped.substr(1, unstripped.length()-2);
 
     }
