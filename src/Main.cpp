@@ -220,9 +220,9 @@ string bencode_json(json info){
 }
 
 void listHashes(string pieces){
-    for (int i = 0; i < pieces.length(); i ++){
+    for (int i = 0; i < pieces.length(); i++){
         cout << pieces[i];
-        if (i % 40 == 39)
+        if (i % 20 == 19)
             cout << endl;
     }
 }
@@ -289,7 +289,7 @@ int main(int argc, char* argv[]) {
         string pieceHashes = decoded_value["info"]["pieces"].dump(-1, ' ', false, json::error_handler_t::ignore);
         cerr << "pieceHashesOrig: " << pieceHashes << endl;
         string pieceHashesHex = getHex(pieceHashes);
-        cerr << "pieceHashesHex: " << pieceHashes << endl;
+        cerr << "pieceHashesHex: " << pieceHashesHex << endl;
         listHashes(pieceHashesHex);
 
     }
