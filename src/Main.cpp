@@ -276,7 +276,7 @@ int main(int argc, char* argv[]) {
         cout << "Info Hash: " << sha1.final() << endl;
         cout << "Piece Length: " << decoded_value["info"]["piece length"].dump() << endl;
         cout << "Piece Hashes:\n";
-        listHashes(pieces);
+        listHashes(decoded_value["info"]["pieces"]);
     }
 
     else {
