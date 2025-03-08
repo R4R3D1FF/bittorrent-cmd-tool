@@ -144,12 +144,7 @@ json decode_bencoded_value(const string& encoded_value){
     return decode_bencoded_value_pair(encoded_value).first;
 }
 
-#include <iostream>
-#include <map>
-#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
-using namespace std;
 
 string bencode_json(const json& info) {
     string ret = "";
