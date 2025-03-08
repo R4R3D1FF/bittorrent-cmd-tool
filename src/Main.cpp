@@ -274,6 +274,7 @@ int main(int argc, char* argv[]) {
         // Uncomment this block to pass the first stage
         string fileContents;
         fileContents = readFile(argv[2]);
+        cout << getHex(fileContents) << endl;
         outputHex(fileContents);
         json decoded_value = decode_bencoded_value(fileContents);
         string trackerURL = decoded_value["announce"].dump();
