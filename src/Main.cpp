@@ -146,42 +146,6 @@ json decode_bencoded_value(const string& encoded_value){
 
 
 
-// string bencode_json(const json& info) {
-//     string ret = "";
-
-//     if (info.is_array()) {
-//         ret += "l";
-//         for (const auto& item : info) {
-//             ret += bencode_json(item);
-//         }
-//         ret += "e";
-//     } 
-//     else if (info.is_object()) {
-//         ret += "d";
-
-//         // Ensure lexicographic order of keys
-//         map<json, json> sorted_dict(info.begin(), info.end());
-
-//         for (const auto& [key, value] : sorted_dict) {
-//             ret += bencode_json(key);
-//             ret += bencode_json(value);
-//         }
-
-//         ret += "e";
-//     } 
-//     else if (info.is_number_integer()) {
-//         ret += "i" + to_string(info.get<int64_t>()) + "e";
-//     } 
-//     else if (info.is_number_float()) {
-//         ret += "i" + to_string(static_cast<int64_t>(info.get<double>())) + "e";  // Bencode does not support floats, truncate
-//     } 
-//     else if (info.is_string()) {
-//         string raw_str = info.get<string>();  // Get the actual string
-//         ret += to_string(raw_str.length()) + ":" + raw_str;
-//     }
-
-//     return ret;
-// }
 
 
 string bencode_json(json info){
@@ -274,8 +238,9 @@ int main(int argc, char* argv[]) {
         // Uncomment this block to pass the first stage
         string fileContents;
         fileContents = readFile(argv[2]);
+        cerr << fileContents << endl;
         cerr << getHex(fileContents) << endl;
-        outputHex(fileContents);
+        // outputHex(fileContents);
         json decoded_value = decode_bencoded_value(fileContents);
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
@@ -287,7 +252,7 @@ int main(int argc, char* argv[]) {
         cout << "Info Hash: " << sha1.final() << endl;
         cout << "Piece Length: " << decoded_value["info"]["piece length"].dump() << endl;
         cout << "Piece Hashes:\n";
-        string pieceHashes = decoded_value["info"]["pieces"].dump(-1, ' ', false, json::error_handler_t::ignore);
+        string pieceHashes = decoded_value["info"]["pieces"].get<string>();
         cerr << "pieceHashesOrig: " << pieceHashes << endl;
         string pieceHashesHex = getHex(pieceHashes);
         cerr << "pieceHashesHex: " << pieceHashesHex << endl;
