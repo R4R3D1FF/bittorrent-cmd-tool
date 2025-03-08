@@ -11,6 +11,18 @@
 using json = nlohmann::json;
 using namespace std;
 
+std::string bytesToHexManual(const std::string& bytes) {
+    static const char hexDigits[] = "0123456789abcdef";
+    std::string hexStr;
+    hexStr.reserve(bytes.size() * 2);  // Preallocate for speed
+
+    for (unsigned char c : bytes) {
+        hexStr.push_back(hexDigits[c >> 4]);  // High nibble
+        hexStr.push_back(hexDigits[c & 0x0F]); // Low nibble
+    }
+    return hexStr;
+}
+
 std::string readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
     if (!file) {
@@ -217,7 +229,7 @@ int main(int argc, char* argv[]) {
         cout << "Length: " << decoded_value["info"]["length"] << endl;
         cerr << "Bencoded json: " << bencode_json(decoded_value["info"]) << endl;
         
-        cout << "Info: " << sha1(bencode_json(decoded_value["info"])) << endl;
+        cout << "Info: " << bytesToHexManual((bencode_json(decoded_value["info"]))) << endl;
     }
 
     else {
