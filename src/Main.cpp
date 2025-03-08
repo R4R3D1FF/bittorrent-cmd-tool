@@ -286,7 +286,7 @@ int main(int argc, char* argv[]) {
         cout << "Info Hash: " << sha1.final() << endl;
         cout << "Piece Length: " << decoded_value["info"]["piece length"].dump() << endl;
         cout << "Piece Hashes:\n";
-        cerr << "piece hashes orig" << decoded_value["info"]["pieces"].dump() << endl;
+        cerr << "piece hashes orig" << decoded_value["info"]["pieces"].dump(-1, ' ', false, json::error_handler_t::ignore) << endl;
         cerr << "piece hashes hex" << getHex(decoded_value["info"]["pieces"].dump());
         listHashes(getHex(decoded_value["info"]["pieces"]));
     }
