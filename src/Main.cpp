@@ -5,7 +5,7 @@
 #include <cctype>
 #include <cstdlib>
 #include "lib/nlohmann/json.hpp"
-#include "lib/sha/sha1.h"
+#include "lib/sha/sha1.hpp"
 
 
 using json = nlohmann::json;
@@ -265,8 +265,9 @@ int main(int argc, char* argv[]) {
         cout << "Length: " << decoded_value["info"]["length"] << endl;
         cerr << "Bencoded json: ";
         outputHex(bencode_json(decoded_value["info"]));
-        
-        cout << "Info: " << sha1(bencode_json(decoded_value["info"])) << endl;
+        SHA1 sha1;
+        sha1.update(bencode_json(decoded_value["info"]));
+        cout << "Info Hash: " << sha1.final();
     }
 
     else {
