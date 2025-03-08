@@ -219,7 +219,13 @@ string bencode_json(json info){
 
 }
 
-
+void listHashes(string pieces){
+    for (int i = 0; i < pieces.length(); i ++){
+        cout << pieces[i];
+        if (i % 40 == 39)
+            cout << endl;
+    }
+}
 
 int main(int argc, char* argv[]) {
     // Flush after every cout / cerr
@@ -267,7 +273,10 @@ int main(int argc, char* argv[]) {
         outputHex(bencode_json(decoded_value["info"]));
         SHA1 sha1;
         sha1.update(bencode_json(decoded_value["info"]));
-        cout << "Info Hash: " << sha1.final();
+        cout << "Info Hash: " << sha1.final() << endl;
+        cout << "Piece Length: " << decoded_value["info"]["piece length"].dump() << endl;
+        cout << "Piece Hashes:\n";
+        listHashes(pieces);
     }
 
     else {
