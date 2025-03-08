@@ -227,6 +227,16 @@ void listHashes(string pieces){
     }
 }
 
+string getHex(string s){
+    string ret;
+    char chrs[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+    for (int i = 0; i < s.length(); i++){
+        ret += chrs[s[i]/16];
+        ret += chrs[s[i]%16];
+    }
+    return ret;
+}
+
 int main(int argc, char* argv[]) {
     // Flush after every cout / cerr
     cout << unitbuf;
@@ -276,7 +286,7 @@ int main(int argc, char* argv[]) {
         cout << "Info Hash: " << sha1.final() << endl;
         cout << "Piece Length: " << decoded_value["info"]["piece length"].dump() << endl;
         cout << "Piece Hashes:\n";
-        listHashes(decoded_value["info"]["pieces"]);
+        listHashes(getHex(decoded_value["info"]["pieces"]));
     }
 
     else {
