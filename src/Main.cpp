@@ -231,8 +231,8 @@ string getHex(string s){
     string ret;
     char chrs[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
     for (int i = 0; i < s.length(); i++){
-        ret += chrs[s[i]/16];
-        ret += chrs[s[i]%16];
+        ret += chrs[((unsigned char) s[i])/16];
+        ret += chrs[((unsigned char) s[i])%16];
     }
     return ret;
 }
