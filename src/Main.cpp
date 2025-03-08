@@ -160,7 +160,7 @@ string bencode_json(const json& info) {
         ret += "d";
 
         // Ensure lexicographic order of keys
-        map<string, json> sorted_dict(info.begin(), info.end());
+        map<json, json> sorted_dict(info.begin(), info.end());
 
         for (const auto& [key, value] : sorted_dict) {
             ret += bencode_json(key);
