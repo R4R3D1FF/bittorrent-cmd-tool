@@ -144,40 +144,85 @@ json decode_bencoded_value(const string& encoded_value){
     return decode_bencoded_value_pair(encoded_value).first;
 }
 
-string bencode_json(json info){
-    // cerr<<"Bencoding\n" << info.dump(-1, ' ' , false, json::error_handler_t::ignore) << endl;
+#include <iostream>
+#include <map>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+using namespace std;
+
+string bencode_json(const json& info) {
     string ret = "";
-    if (info.is_array()){
+
+    if (info.is_array()) {
         ret += "l";
-        for (int i = 0; i < info.size(); i++){
-            ret += bencode_json(info[i]);
+        for (const auto& item : info) {
+            ret += bencode_json(item);
         }
         ret += "e";
-    }
-    else if (info.is_object()){
+    } 
+    else if (info.is_object()) {
         ret += "d";
-        for (auto item: info.items()){
-            ret += bencode_json(item.key());
-            ret += bencode_json(item.value());
+
+        // Ensure lexicographic order of keys
+        map<string, json> sorted_dict(info.begin(), info.end());
+
+        for (const auto& [key, value] : sorted_dict) {
+            ret += bencode_json(key);
+            ret += bencode_json(value);
         }
+
         ret += "e";
+    } 
+    else if (info.is_number_integer()) {
+        ret += "i" + to_string(info.get<int64_t>()) + "e";
+    } 
+    else if (info.is_number_float()) {
+        ret += "i" + to_string(static_cast<int64_t>(info.get<double>())) + "e";  // Bencode does not support floats, truncate
+    } 
+    else if (info.is_string()) {
+        string raw_str = info.get<string>();  // Get the actual string
+        ret += to_string(raw_str.length()) + ":" + raw_str;
     }
-    else if (info.is_number()){
-        ret += 'i';
-        ret += info.dump(-1, ' ' , false, json::error_handler_t::ignore);
-        ret += 'e';
-    }
-    else if (info.is_string()){
-        string unstripped = info.dump(-1, ' ' , false, json::error_handler_t::ignore);
-        ret += to_string(unstripped.length()-2);
-        ret += ':';
-        
-        ret += unstripped.substr(1, unstripped.length()-2);
 
-    }
     return ret;
-
 }
+
+
+// string bencode_json(json info){
+//     // cerr<<"Bencoding\n" << info.dump(-1, ' ' , false, json::error_handler_t::ignore) << endl;
+//     string ret = "";
+//     if (info.is_array()){
+//         ret += "l";
+//         for (int i = 0; i < info.size(); i++){
+//             ret += bencode_json(info[i]);
+//         }
+//         ret += "e";
+//     }
+//     else if (info.is_object()){
+//         ret += "d";
+//         for (auto item: info.items()){
+//             ret += bencode_json(item.key());
+//             ret += bencode_json(item.value());
+//         }
+//         ret += "e";
+//     }
+//     else if (info.is_number()){
+//         ret += 'i';
+//         ret += info.dump(-1, ' ' , false, json::error_handler_t::ignore);
+//         ret += 'e';
+//     }
+//     else if (info.is_string()){
+//         string unstripped = info.dump(-1, ' ' , false, json::error_handler_t::ignore);
+//         ret += to_string(unstripped.length()-2);
+//         ret += ':';
+        
+//         ret += unstripped.substr(1, unstripped.length()-2);
+
+//     }
+//     return ret;
+
+// }
 
 
 
