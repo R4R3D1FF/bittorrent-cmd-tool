@@ -11,16 +11,12 @@
 using json = nlohmann::json;
 using namespace std;
 
-std::string bytesToHexManual(const std::string& bytes) {
-    static const char hexDigits[] = "0123456789abcdef";
-    std::string hexStr;
-    hexStr.reserve(bytes.size() * 2);  // Preallocate for speed
-
-    for (unsigned char c : bytes) {
-        hexStr.push_back(hexDigits[c >> 4]);  // High nibble
-        hexStr.push_back(hexDigits[c & 0x0F]); // Low nibble
+void outputHex(string str) {
+    
+    for (unsigned char c : str) {
+        std::cerr << std::hex << std::setw(2) << std::setfill('0') << (int)c << " ";
     }
-    return hexStr;
+    std::cerr << std::endl;
 }
 
 std::string readFile(const std::string& filename) {
@@ -222,12 +218,13 @@ int main(int argc, char* argv[]) {
         // Uncomment this block to pass the first stage
         string fileContents;
         fileContents = readFile(argv[2]);
-        cerr << fileContents<< endl;
+        outputHex(fileContents);
         json decoded_value = decode_bencoded_value(fileContents);
         string trackerURL = decoded_value["announce"].dump();
         cout << "Tracker URL: " << trackerURL.substr(1, trackerURL.length()-2) << endl;
         cout << "Length: " << decoded_value["info"]["length"] << endl;
-        cerr << "Bencoded json: " << bencode_json(decoded_value["info"]) << endl;
+        cerr << "Bencoded json: ";
+        outputHex(bencode_json(decoded_value["info"]));
         
         cout << "Info: " << sha1(bencode_json(decoded_value["info"])) << endl;
     }
