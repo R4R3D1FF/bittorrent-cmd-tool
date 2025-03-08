@@ -229,7 +229,7 @@ int main(int argc, char* argv[]) {
         cout << "Length: " << decoded_value["info"]["length"] << endl;
         cerr << "Bencoded json: " << bencode_json(decoded_value["info"]) << endl;
         
-        cout << "Info: " << bytesToHexManual(sha1(bencode_json(decoded_value["info"]))) << endl;
+        cout << "Info: " << sha1(bencode_json(decoded_value["info"])) << endl;
     }
 
     else {
