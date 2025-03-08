@@ -186,7 +186,7 @@ string bencode_json(json info){
 void listHashes(string pieces){
     for (int i = 0; i < pieces.length(); i++){
         cout << pieces[i];
-        if (i % 20 == 19)
+        if (i % 40 == 39)
             cout << endl;
     }
 }
