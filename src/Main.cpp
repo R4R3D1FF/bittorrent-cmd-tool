@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include "lib/nlohmann/json.hpp"
 #include "lib/sha/sha1.hpp"
+#include <curl/curl.h>
 
 
 using json = nlohmann::json;
