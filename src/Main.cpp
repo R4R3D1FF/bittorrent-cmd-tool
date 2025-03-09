@@ -7,6 +7,8 @@
 #include "lib/nlohmann/json.hpp"
 #include "lib/sha/sha1.hpp"
 #include <curl/curl.h>
+#include "./utils/getRequest.cpp"
+#include <format>
 
 
 using json = nlohmann::json;
@@ -202,6 +204,23 @@ string getHex(string s){
     return ret;
 }
 
+vector<string> extractPeers(string s){
+    vector<string> ret;
+    for (int i = 0; i < s.length(); i += 6){
+        string peer = "";
+        for (int j = 0; j < 4; j++){
+            peer += to_string((unsigned int) s[i+j]);
+            if (j != 3)
+                peer += '.';
+        }
+        peer += to_string(s[i+4]*256 + s[i+5]);
+        int num;
+        std::memcpy(&num, s.data() + 4, 2);
+        peer += ':' + to_string(num);
+        ret.push_back(peer);
+    }
+}
+
 int main(int argc, char* argv[]) {
     // Flush after every cout / cerr
     cout << unitbuf;
@@ -258,6 +277,39 @@ int main(int argc, char* argv[]) {
         string pieceHashesHex = getHex(pieceHashes);
         cerr << "pieceHashesHex: " << pieceHashesHex << endl;
         listHashes(pieceHashesHex);
+
+    }
+
+    else if (command == "peers"){
+        if (argc < 3) {
+            cerr << "Usage: " << argv[0] << " info <torrent_file>" << endl;
+            return 1;
+        }
+        // You can use print statements as follows for debugging, they'll be visible when running tests.
+        cerr << "Logs from your program will appear here!" << endl;
+
+        // Uncomment this block to pass the first stage
+        string fileContents;
+        fileContents = readFile(argv[2]);
+        json decoded_value = decode_bencoded_value(fileContents);
+        string trackerURL = decoded_value["announce"].get<string>();
+        string peer_id = "adityahanjiteddybear";
+        SHA1 sha1;
+        sha1.update(bencode_json(decoded_value["info"]));
+        string info_hash = sha1.final();
+        int port = 6881;
+        int uploaded = 0;
+        int downloaded = 0;
+        int left = decoded_value["info"]["length"];
+        bool compact = 1;
+        string resp = getRequest(format("{}?info_hash={}&peer_id={}&port={}&uploaded={}&downloaded={}&left={}&compact={}", trackerURL, info_hash, peer_id, port, uploaded, downloaded, left, compact));
+        string decoded_resp = decode_bencoded_value(resp);
+        string peersRaw = decoded_resp["peers"].get<string>();
+        
+        vector<string> peers = extractPeers(peersRaw);
+        for (int i = 0; i < peers.size(); i++){
+            cout << peers[i] << endl;
+        }
 
     }
 
