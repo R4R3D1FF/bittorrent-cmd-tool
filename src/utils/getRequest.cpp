@@ -70,15 +70,15 @@ json fetchJson(const string &baseUrl, const map<string, string> &queryParams = {
     return json::parse(response);
 }
 
-int main(){
-    map<string, string> queries;
-    queries["info_hash"] = "70edcac2611a8829ebf467a6849f5d8408d9d8f4";
-    queries["peer_id"] = "adityahanjiteddybear";
-    queries["port"] = "6881";
-    queries["uploaded"] = "0";
-    queries["downloaded"] = "0";
-    queries["left"] = "262144";
-    queries["compact"] = "1";
-    cout << fetchJson("http://bittorrent-test-tracker.codecrafters.io", queries).dump() << endl;
-    return 0;
-}
+// int main(){
+//     map<string, string> queries;
+//     queries["info_hash"] = "70edcac2611a8829ebf467a6849f5d8408d9d8f4";
+//     queries["peer_id"] = "adityahanjiteddybear";
+//     queries["port"] = "6881";
+//     queries["uploaded"] = "0";
+//     queries["downloaded"] = "0";
+//     queries["left"] = "262144";
+//     queries["compact"] = "1";
+//     cout << fetchJson("http://bittorrent-test-tracker.codecrafters.io", queries).dump() << endl;
+//     return 0;
+// }
