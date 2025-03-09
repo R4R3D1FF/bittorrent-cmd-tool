@@ -30,7 +30,7 @@ string urlEncode(const string &input) {
     return ret;
 }
 
-int main(){
-    cout << urlEncode("c77829d2a77d6516f88cd7a3de1a26abcbfab0db");
-    return 0;
-}
+// int main(){
+//     cout << urlEncode("c77829d2a77d6516f88cd7a3de1a26abcbfab0db");
+//     return 0;
+// }
