@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include "../lib/nlohmann/json.hpp"
+#include <curl/curl.h>
 
 using namespace std;
 using json = nlohmann::json;
