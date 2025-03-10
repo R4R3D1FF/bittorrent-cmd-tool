@@ -240,8 +240,7 @@ vector<string> extractPeers(string s){
         }
         // peer += to_string(s[i+4]*256 + s[i+5]);
         uint16_t num;
-        std::memcpy(&num, s.data() + 4, 2);
-        num = (uint16_t)(s[5] << 8) | (uint16_t)s[4]; // Ensures correct order
+        num = (uint16_t)(s[i+4] << 8) | (uint16_t)s[i+5]; // Ensures correct order
 
         peer += ':' + std::to_string(num);
         ret.push_back(peer);
