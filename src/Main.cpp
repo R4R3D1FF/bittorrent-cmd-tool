@@ -233,7 +233,7 @@ vector<string> extractPeers(string s){
     for (int i = 0; i < s.length(); i += 6){
         string peer = "";
         for (int j = 0; j < 4; j++){
-            cerr << (unsigned char) s[i+j] << endl;
+            cerr << (byte) s[i+j] << endl;
             peer += to_string((unsigned int) s[i+j]);
             if (j != 3)
                 peer += '.';
