@@ -236,7 +236,7 @@ vector<string> extractPeers(string s){
             if (j != 3)
                 peer += '.';
         }
-        peer += to_string(s[i+4]*256 + s[i+5]);
+        // peer += to_string(s[i+4]*256 + s[i+5]);
         int num;
         std::memcpy(&num, s.data() + 4, 2);
         peer += ':' + to_string(num);
@@ -336,6 +336,8 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < peers.size(); i++){
             cout << peers[i] << endl;
         }
+
+
 
     }
 
