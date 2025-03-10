@@ -113,7 +113,8 @@ pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init
         } else {
             throw runtime_error("Invalid encoded value: " + encoded_value);
         }
-    } 
+    }
+
     else if (encoded_value[i] == 'i'){
         long long total = 0;
         i++;
@@ -232,7 +233,7 @@ vector<string> extractPeers(string s){
     for (int i = 0; i < s.length(); i += 6){
         string peer = "";
         for (int j = 0; j < 4; j++){
-            cerr << (unsigned int) s[i+j] << endl;
+            cerr << (unsigned char) s[i+j] << endl;
             peer += to_string((unsigned int) s[i+j]);
             if (j != 3)
                 peer += '.';
