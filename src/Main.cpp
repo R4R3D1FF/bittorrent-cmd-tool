@@ -302,7 +302,7 @@ int main(int argc, char* argv[]) {
         int uploaded = 0;
         int downloaded = 0;
         int left = decoded_value["info"]["length"];
-        bool compact = 1;
+        int compact = 1;
         cerr << format("{}?info_hash={}&peer_id={}&port={}&uploaded={}&downloaded={}&left={}&compact={}", trackerURL, info_hash, peer_id, port, uploaded, downloaded, left, compact) << endl;
         string resp = getRequest(format("{}?info_hash={}&peer_id={}&port={}&uploaded={}&downloaded={}&left={}&compact={}", trackerURL, info_hash, peer_id, port, uploaded, downloaded, left, compact));
         cerr << resp << endl;
