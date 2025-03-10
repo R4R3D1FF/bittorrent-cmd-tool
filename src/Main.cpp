@@ -219,6 +219,7 @@ vector<string> extractPeers(string s){
         peer += ':' + to_string(num);
         ret.push_back(peer);
     }
+    return ret;
 }
 
 int main(int argc, char* argv[]) {
@@ -303,7 +304,7 @@ int main(int argc, char* argv[]) {
         int left = decoded_value["info"]["length"];
         bool compact = 1;
         string resp = getRequest(format("{}?info_hash={}&peer_id={}&port={}&uploaded={}&downloaded={}&left={}&compact={}", trackerURL, info_hash, peer_id, port, uploaded, downloaded, left, compact));
-        string decoded_resp = decode_bencoded_value(resp);
+        json decoded_resp = decode_bencoded_value(resp);
         string peersRaw = decoded_resp["peers"].get<string>();
         
         vector<string> peers = extractPeers(peersRaw);
