@@ -239,8 +239,8 @@ vector<string> extractPeers(string s){
                 peer += '.';
         }
         // peer += to_string(s[i+4]*256 + s[i+5]);
-        uint16_t num;
-        num = ((uint16_t) s[5])*16 + (uint16_t) s[4];
+        int num = 0;
+        std::memcpy(&num, s.data() + 4, 2);
         peer += ':' + to_string(num);
         ret.push_back(peer);
     }
