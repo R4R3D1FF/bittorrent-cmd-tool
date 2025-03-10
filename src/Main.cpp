@@ -303,7 +303,9 @@ int main(int argc, char* argv[]) {
         int downloaded = 0;
         int left = decoded_value["info"]["length"];
         bool compact = 1;
+        cerr << format("{}?info_hash={}&peer_id={}&port={}&uploaded={}&downloaded={}&left={}&compact={}", trackerURL, info_hash, peer_id, port, uploaded, downloaded, left, compact) << endl;
         string resp = getRequest(format("{}?info_hash={}&peer_id={}&port={}&uploaded={}&downloaded={}&left={}&compact={}", trackerURL, info_hash, peer_id, port, uploaded, downloaded, left, compact));
+        cerr << resp << endl;
         json decoded_resp = decode_bencoded_value(resp);
         string peersRaw = decoded_resp["peers"].get<string>();
         
