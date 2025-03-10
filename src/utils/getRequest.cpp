@@ -35,7 +35,7 @@ string getRequest(string url) {
 
         // Check for errors
         if (res != CURLE_OK) {
-            ret = "curl_easy_perform() failed: " + curl_easy_strerror(res) + '\n';
+            ret = "curl_easy_perform() failed: " + string(curl_easy_strerror(res)) + '\n';
         } else {
             // Print the response data
             ret = response_data;
