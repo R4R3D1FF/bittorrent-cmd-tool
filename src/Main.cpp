@@ -70,6 +70,29 @@ string printVector(vector<pair<string, string>> v){
 }
 
 
+
+string urlEncodeHex(string hex){
+    string ret;
+    
+    for (size_t i = 0; i < hex.length(); i += 2) {
+        // Convert each pair of hex characters to a byte
+        string byteString = hex.substr(i, 2);
+        char byte = static_cast<char>(stoi(byteString, nullptr, 16));
+
+        // URL encode if necessary
+        if (isalnum(byte) || byte == '-' || byte == '_' || byte == '.' || byte == '~') {
+            ret += byte;  // Safe characters remain unchanged
+        } else {
+            ret += '%';
+            ret += hex[i];
+            ret += hex[i+1];
+        }
+    }
+    return ret;
+
+}
+
+
 pair<json, int> decode_bencoded_value_pair(const string& encoded_value, int init = 0) {
     int i = init;
 
@@ -297,7 +320,7 @@ int main(int argc, char* argv[]) {
         string peer_id = "adityahanjiteddybear";
         SHA1 sha1;
         sha1.update(bencode_json(decoded_value["info"]));
-        string info_hash = sha1.final();
+        string info_hash = urlEncodeHex(sha1.final());
         int port = 6881;
         int uploaded = 0;
         int downloaded = 0;
