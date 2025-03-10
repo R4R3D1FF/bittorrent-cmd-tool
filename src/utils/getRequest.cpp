@@ -1,6 +1,6 @@
+#include "http_request.h"
 #include <iostream>
-#include <string>
-#include <curl/curl.h>
+
 using namespace std;
 
 // Callback function to write response data into a string
@@ -10,13 +10,12 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* res
     return totalSize;
 }
 
-string getRequest(string url) {
+// Function to send a GET request and return the response as a string
+std::string getRequest(std::string url) {
     string ret;
     CURL *curl;
     CURLcode res;
     string response_data;
-
-    // URL with query parameters
 
     // Initialize libcurl
     curl_global_init(CURL_GLOBAL_ALL);
@@ -37,7 +36,6 @@ string getRequest(string url) {
         if (res != CURLE_OK) {
             ret = "curl_easy_perform() failed: " + string(curl_easy_strerror(res)) + '\n';
         } else {
-            // Print the response data
             ret = response_data;
         }
 
