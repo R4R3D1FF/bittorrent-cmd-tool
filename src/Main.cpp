@@ -7,7 +7,7 @@
 #include "lib/nlohmann/json.hpp"
 #include "lib/sha/sha1.hpp"
 #include <curl/curl.h>
-#include "./utils/getRequest.cpp"
+#include "./utils/getRequest.h"
 #include <format>
 
 
