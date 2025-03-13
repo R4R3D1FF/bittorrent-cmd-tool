@@ -441,7 +441,6 @@ int main(int argc, char* argv[]) {
             // Listen for response
             char reply[1024];
             size_t reply_length = socket.read_some(boost::asio::buffer(reply));
-            vector<uint8_t> replyBytes = decodeURLEncoded(string(reply, reply_length));
             std::cout << "Peer ID: " << getHex(std::string(reply+reply_length-20, reply_length)) << std::endl;
             
         } catch (std::exception& e) {
