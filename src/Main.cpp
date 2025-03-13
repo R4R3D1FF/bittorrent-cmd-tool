@@ -266,6 +266,7 @@ vector<uint8_t> decodeHex(string s){
             num += s[i] - 'a' + 10;
         ret.push_back(num);
     }
+    return ret;
 }
 
 int main(int argc, char* argv[]) {
@@ -382,7 +383,7 @@ int main(int argc, char* argv[]) {
             boost::asio::connect(socket, endpoints);
     
             // Send data
-            std::vector<uint8_t> message = {0x19}
+            std::vector<uint8_t> message = {0x19};
             string prot = "Bittorrent protocol";
             message.insert(message.end(), prot.begin(), prot.end())
             for (int i = 0; i < 8; i++)
