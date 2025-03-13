@@ -380,7 +380,7 @@ int main(int argc, char* argv[]) {
             tcp::resolver resolver(io_context);
 
             string ip = peer.substr(0, peer.find(':'));
-            string port = peer.substr(peer.size()-peer.find(':'), peer.find(':'));
+            string port = peer.substr(peer.find(':')+1, peer.length()-peer.find(':')-1);
             cerr << ip << ' ' << port << endl;
             tcp::resolver::results_type endpoints = resolver.resolve(ip, port);
             tcp::socket socket(io_context);
