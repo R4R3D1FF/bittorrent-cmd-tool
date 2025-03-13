@@ -277,7 +277,7 @@ std::vector<uint8_t> decodeHex(const std::string& s) {
             throw std::invalid_argument("Invalid hex character: '" + std::string(1, s[i+1]) + "' at position " + std::to_string(i+1));
 
         ret.push_back(num);
-        cerr << num  << ' ';
+        cerr << (unsigned) (uint8_t) num  << ' ';
     }
     cerr << endl;
     return ret;
