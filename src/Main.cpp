@@ -254,7 +254,7 @@ vector<string> extractPeers(string s){
 vector<uint8_t> decodeHex(string s){
     vector<uint8_t> ret;
     for (int i = 0; i < s.length(); i+=2){
-        uint8_t num;
+        uint8_t num = 0;
         if (s[i] <= '9')
             num += 16*(s[i] - '0');
         else{
