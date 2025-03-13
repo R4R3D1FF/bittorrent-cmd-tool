@@ -277,7 +277,9 @@ std::vector<uint8_t> decodeHex(const std::string& s) {
             throw std::invalid_argument("Invalid hex character: '" + std::string(1, s[i+1]) + "' at position " + std::to_string(i+1));
 
         ret.push_back(num);
+        cerr << num  << ' ';
     }
+    cerr << endl;
     return ret;
 }
 
@@ -383,7 +385,7 @@ int main(int argc, char* argv[]) {
         json decoded_value = decode_bencoded_value(fileContents);
         SHA1 sha1;
         sha1.update(bencode_json(decoded_value["info"]));
-        cout << sha1.final() << endl;
+        cerr << sha1.final() << endl;
         vector<uint8_t> rawInfoHash = decodeHex(sha1.final());
         string peer = argv[3];
         try {
