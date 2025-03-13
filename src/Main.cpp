@@ -251,19 +251,31 @@ vector<string> extractPeers(string s){
     return ret;
 }
 
-vector<uint8_t> decodeHex(string s){
-    vector<uint8_t> ret;
-    for (int i = 0; i < s.length(); i+=2){
+std::vector<uint8_t> decodeHex(const std::string& s) {
+    if (s.length() % 2 != 0) {
+        throw std::invalid_argument("Hex string must have an even length.");
+    }
+
+    std::vector<uint8_t> ret;
+    for (size_t i = 0; i < s.length(); i += 2) {
         uint8_t num = 0;
-        if (s[i] <= '9')
-            num += 16*(s[i] - '0');
-        else{
-            num += 16*(10 + s[i] - 'a');
-        }
-        if (s[i+1] <= '9')
-            num += s[i+1] - '0';
+
+        // First hex digit
+        if (s[i] >= '0' && s[i] <= '9')
+            num += 16 * (s[i] - '0');
+        else if (s[i] >= 'a' && s[i] <= 'f')
+            num += 16 * (10 + (s[i] - 'a'));
         else
-            num += s[i+1] - 'a' + 10;
+            throw std::invalid_argument("Invalid hex character: '" + std::string(1, s[i]) + "' at position " + std::to_string(i));
+
+        // Second hex digit
+        if (s[i+1] >= '0' && s[i+1] <= '9')
+            num += s[i+1] - '0';
+        else if (s[i+1] >= 'a' && s[i+1] <= 'f')
+            num += 10 + (s[i+1] - 'a');
+        else
+            throw std::invalid_argument("Invalid hex character: '" + std::string(1, s[i+1]) + "' at position " + std::to_string(i+1));
+
         ret.push_back(num);
     }
     return ret;
