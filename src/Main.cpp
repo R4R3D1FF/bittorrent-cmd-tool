@@ -9,6 +9,7 @@
 #include <curl/curl.h>
 #include "./utils/getRequest.h"
 #include <format>
+#include <boost/asio.hpp>
 
 
 using json = nlohmann::json;
