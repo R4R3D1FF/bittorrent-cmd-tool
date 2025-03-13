@@ -261,9 +261,9 @@ vector<uint8_t> decodeHex(string s){
             num += 16*(10 + s[i] - 'a');
         }
         if (s[i+1] <= '9')
-            num += s[i] - '0';
+            num += s[i+1] - '0';
         else
-            num += s[i] - 'a' + 10;
+            num += s[i+1] - 'a' + 10;
         ret.push_back(num);
     }
     return ret;
