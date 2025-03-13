@@ -378,7 +378,7 @@ int main(int argc, char* argv[]) {
     
             // Connect to the server at 127.0.0.1, port 8000
             tcp::resolver resolver(io_context);
-            cerr << peer.substr(0, peer.size()-5) << ' ' << peer.substr(peer.size()-4, 4) << endl
+            cerr << peer.substr(0, peer.size()-5) << ' ' << peer.substr(peer.size()-4, 4) << endl;
             tcp::resolver::results_type endpoints = resolver.resolve(peer.substr(0, peer.size()-5), peer.substr(peer.size()-4, 4));
             tcp::socket socket(io_context);
             boost::asio::connect(socket, endpoints);
