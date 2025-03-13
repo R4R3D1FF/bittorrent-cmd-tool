@@ -283,6 +283,29 @@ std::vector<uint8_t> decodeHex(const std::string& s) {
     return ret;
 }
 
+
+std::vector<uint8_t> decodeURLEncoded(const std::string& encoded) {
+    std::vector<uint8_t> decoded;
+    size_t i = 0;
+
+    while (i < encoded.length()) {
+        if (encoded[i] == '%' && i + 2 < encoded.length()) {
+            // Convert "%xx" -> raw byte
+            std::string hex = encoded.substr(i + 1, 2);
+            uint8_t byte = std::stoi(hex, nullptr, 16);
+            decoded.push_back(byte);
+            i += 3; // Move past "%xx"
+        } else {
+            // Normal character (e.g., alphanumeric, special)
+            decoded.push_back(static_cast<uint8_t>(encoded[i]));
+            i++;
+        }
+    }
+
+    return decoded;
+}
+
+
 int main(int argc, char* argv[]) {
     // Flush after every cout / cerr
     cout << unitbuf;
@@ -418,7 +441,11 @@ int main(int argc, char* argv[]) {
             // Listen for response
             char reply[1024];
             size_t reply_length = socket.read_some(boost::asio::buffer(reply));
-            std::cout << std::string(reply+reply_length-20, reply_length) << std::endl;
+            vector<uint8_t> replyBytes = decodeURLEncoded(string(reply, reply_length));
+            for (int i = replyBytes.size()-20; i < replyBytes.size(); i++){
+                cout << replyBytes[i];
+            }
+            cout << endl;
             
         } catch (std::exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
