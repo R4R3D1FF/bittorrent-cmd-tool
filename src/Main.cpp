@@ -248,6 +248,23 @@ vector<string> extractPeers(string s){
     return ret;
 }
 
+vector<uint8_t> decodeHex(string s){
+    vector<uint8_t> ret;
+    for (int i = 0; i < s.length(); i+=2){
+        uint8_t num;
+        if (s[i] <= '9')
+            num += 16*(s[i] - '0');
+        else{
+            num += 16*(10 + s[i] - 'a');
+        }
+        if (s[i+1] <= '9')
+            num += s[i] - '0';
+        else
+            num += s[i] - 'a' + 10;
+        ret.push_back(num);
+    }
+}
+
 int main(int argc, char* argv[]) {
     // Flush after every cout / cerr
     cout << unitbuf;
@@ -342,6 +359,44 @@ int main(int argc, char* argv[]) {
 
 
 
+    }
+
+    else if (command == "handshake"){
+        string fileContents;
+        fileContents = readFile(argv[2]);
+        json decoded_value = decode_bencoded_value(fileContents);
+        SHA1 sha1;
+        sha1.update(bencode_json(decoded_value["info"]));
+        vector<uint_8> rawInfoHash = decodeHex(sha1.final());
+        string peer = argv[3];
+        try {
+            boost::asio::io_context io_context;
+    
+            // Connect to the server at 127.0.0.1, port 8000
+            tcp::resolver resolver(io_context);
+            tcp::resolver::results_type endpoints = resolver.resolve(peer.substr(0, peer.size()-5), peer.substr(peer.size()-4, 4));
+            tcp::socket socket(io_context);
+            boost::asio::connect(socket, endpoints);
+    
+            // Send data
+            std::vector<uint8_t> message = {0x19, "B", "i", "t", "t", "o", "r", "r", "e", "n", "t", " ", "p", "r", "o", "t", "o", "c", "o", "l", 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+            message.insert(message.end(), rawInfoHash.begin(), rawInfoHash.end());
+            string peerid = "adityahanjiteddybear";
+            message.insert(message.end(), peerid.begin(), peerid.end());
+
+
+            boost::asio::write(socket, boost::asio::buffer(message));
+    
+            // Listen for response
+            char reply[1024];
+            size_t reply_length = socket.read_some(boost::asio::buffer(reply));
+            std::cout << std::string(reply+reply_length-20, reply_length) << std::endl;
+            
+        } catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    
+        return 0;
     }
 
     else {
