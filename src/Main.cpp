@@ -387,7 +387,7 @@ int main(int argc, char* argv[]) {
             boost::asio::connect(socket, endpoints);
     
             // Send data
-            std::vector<uint8_t> message = {0x19};
+            std::vector<uint8_t> message = {0x13};
             string prot = "Bittorrent protocol";
             message.insert(message.end(), prot.begin(), prot.end());
             for (int i = 0; i < 8; i++)
