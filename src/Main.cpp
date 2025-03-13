@@ -441,8 +441,8 @@ int main(int argc, char* argv[]) {
             // Listen for response
             char reply[1024];
             size_t reply_length = socket.read_some(boost::asio::buffer(reply));
-            cerr << string(reply + reply_length-20, reply_length) << endl;
-            std::cout << "Peer ID: " << getHex(std::string(reply+reply_length-20, reply_length)) << std::endl;
+            // cerr << string(reply + reply_length-20, 20) << endl;
+            std::cout << "Peer ID: " << getHex(std::string(reply+reply_length-20, 20)) << std::endl;
             
         } catch (std::exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;
