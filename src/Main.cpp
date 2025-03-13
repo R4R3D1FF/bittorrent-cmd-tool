@@ -371,6 +371,7 @@ int main(int argc, char* argv[]) {
         json decoded_value = decode_bencoded_value(fileContents);
         SHA1 sha1;
         sha1.update(bencode_json(decoded_value["info"]));
+        cout << sha1.final() << endl;
         vector<uint8_t> rawInfoHash = decodeHex(sha1.final());
         string peer = argv[3];
         try {
