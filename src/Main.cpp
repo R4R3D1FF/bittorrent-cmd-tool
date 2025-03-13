@@ -385,7 +385,7 @@ int main(int argc, char* argv[]) {
             // Send data
             std::vector<uint8_t> message = {0x19};
             string prot = "Bittorrent protocol";
-            message.insert(message.end(), prot.begin(), prot.end())
+            message.insert(message.end(), prot.begin(), prot.end());
             for (int i = 0; i < 8; i++)
                 message.push_back(0);
             message.insert(message.end(), rawInfoHash.begin(), rawInfoHash.end());
